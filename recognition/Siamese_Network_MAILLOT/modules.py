@@ -6,22 +6,7 @@ modules.py - contains all neural network and custom loss function code
 
 import torch
 import torch.nn as nn
-#import torch.nn.functional as F
-#import torch.optim as optim
-#from torch.utils.data import Dataset, DataLoader
 from torchvision import  models
-#import numpy as np
-#import pandas as pd
-#from sklearn.model_selection import train_test_split
-#from sklearn.metrics import roc_auc_score, accuracy_score, average_precision_score, confusion_matrix
-#import random
-#import itertools
-#from PIL import Image
-#import os
-#import glob
-#from pathlib import Path
-#import shutil
-#import matplotlib.pyplot as plt
 
 class EmbeddingNet(nn.Module):
     """
