@@ -45,6 +45,7 @@ Also, accorrding to [[2](#references)][[3](#references)][[4](#references)], ROC-
 The data used in this project is the preprocessed ISIC 2020 dataset available [here](https://www.kaggle.com/datasets/nischaydnk/isic-2020-jpg-256x256-resized/data). In this dataset, the images have been resized to `256x256`. The metadata files only contains the images labels, image names and patient IDs. 
 
 To run the code in this repository, you need to download the dataset from the above kaggle link to the machine that will run the code. Ideally, the downloaded materials should be placed in their own folder. The data needs to be reorganised to fit the following structure:
+
 ```
 your-data-folder-name/
 ├── train-metadata.csv
@@ -53,11 +54,13 @@ your-data-folder-name/
     ├── ISIC_0052212.jpg
     └── ...
 ```
+
 This `your-data-folder-name` folder can be placed anywhere in the machine, so long as the path to the folder is passed to the `DATA_ROOT` hyperparameter. The parameter is currently set such that if the folder is named `data`, it should be placed in this location after cloning the repository:
+
 ```
 PatternAnalysis-2025/recognition/Siamese_Network_Maillot/
 │
-├── readme_figures/
+├── README_figures/
 │   └── ...
 │
 ├── dataset.py
@@ -73,11 +76,13 @@ PatternAnalysis-2025/recognition/Siamese_Network_Maillot/
         ├── ISIC_0052212.jpg
         └── ...
 ```
+
 #### Code files
 
 `dataset.py` contains all the classes required for data manipulation and data loading. This class handles making a 80/10/10 train/validation/test split of the data. It also oversamples the minority class for the training set, such that the training set is balanced. At runtime, the training data will be augmented with rotations, flips and colour jitters. The validation and testing set are not oversampled nor augmented. 
 
-`modules.py` contains the neural network architectures and the triplet loss function implementation. The neural network consists of a ResNet50 and a simple classifier head. The triplet loss function is implemented by hand, following the following equation
+`modules.py` contains the neural network architectures and the triplet loss function implementation. The neural network consists of a ResNet50 and a simple classifier head. The triplet loss function is implemented by hand, following the following equation:
+
 ```
 L(A, P, N) = max(0, ||f(A) - f(P)||^2 - ||f(A) - f(N)||^2 + margin)
 ```
@@ -104,7 +109,7 @@ Here we present results of the most successful run of training.
 
 ### Hyperparameters
 
-The hyperparameters for the model that gaves the best metrics were as follows:
+The hyperparameters for the model that gave the best metrics were as follows:
 
 ```py
 EMBEDDING_DIM = 128
@@ -131,7 +136,7 @@ The model was trained for 20 epoch, but the model with the highest AP score was 
 
 ![Best model training and validation metrics](README_figures/best_model_train_val_metrics.png)
 
-The loss over the different epochs show that the model had a low loss on the validation set on that epoch. 
+The loss over the different epochs show that the model had low loss on the validation set on that epoch. 
 
 ![Loss plotted against epochs](README_figures/loss_logs.png)
 
@@ -146,6 +151,7 @@ We notice that the validation triplet loss, the ROC AUC and the AP score somewha
 The model was tested on the test set. The metrics were evaluated once on the test set and once on a balanced subset of the test set giving us different insights. 
 
 Test metrics on the full test set were as follows:
+
 ```
 Classification Accuracy: 0.8539
 ROC AUC: 0.8573
@@ -153,7 +159,9 @@ Average Precision Score: 0.1503
 Sensitivity: 0.6034
 Specificity: 0.8584
 ```
+
 Test metrics on the test set sample were as follows:
+
 ```
 Classification Accuracy: 0.7328
 ROC AUC: 0.8546
@@ -161,20 +169,25 @@ Average Precision Score: 0.8437
 Sensitivity: 0.6034
 Specificity: 0.8621
 ```
+
 The sensitivity is low, which shows the model predicts too many false negatives. The influence of the class imbalance is also seen in how the classification accuracy changes between the two.
 
 The confusion matrices show the same issue.
 
 Here the confusion matrice on the full test set:
+
 ![Confusion matrice full test set](README_figures/confusion_matrix.png)
 
 Here the confusion matrice on the test set sample:
+
 ![Confusion matrice test set sample](README_figures/confusion_matrix_Subset.png)
 
 The ROC curve and the precision-recall curve on the test subset don't look too alarming.
+
 ![ROC curve and PR curve test set sample](README_figures/ROCAUC_PRC_Subset.png)
 
 However the precision-recall curve on the full test set shows a different story.
+
 ![ROC curve and PR curve full test set](README_figures/ROCAUC_PRC.png)
 
 These plots also show that the ROC curve cannot always be trusted, especially with imbalanced datasets. The ROC looks similarly good in both cases, and the ROC AUC in general has looked promising through this whole process. The precision-recall curve here shows that the model is not performing as well as the ROC suggests. 
